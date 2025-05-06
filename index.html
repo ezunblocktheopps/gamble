@@ -1,0 +1,974 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<meta http-equiv="content-language" content="en-gb">
+<meta name="keywords" content="Math,  Maths,  Mathematics,  Numeracy,  Quiz, Test, Arithmetic, Numbers, Calculate, Thinking Skills">
+<meta name="description" content="Learn more about probability so that you are better able to make informed choices.">
+<meta name="abstract" content="Learn more about probability so that you are better able to make informed choices.">
+<meta name="author" content="Transum Mathematics">
+<meta name="copyright" content="(C) Transum Mathematics. https://www.Transum.org">
+<meta name="distribution" content="Global">
+<meta name="robots" content="All">
+<meta name="rating" content="General">
+<meta name="thumbnail" content="https://www.transum.org/Go/Thumbnails/810.gif">
+
+<link rel="canonical" href="https://www.transum.org/Maths/Activity/Probability/Gambling.asp">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<meta property="og:title" content="Gambling">
+<meta property="og:url" content="https://www.transum.org/Maths/Activity/Probability/Gambling.asp">
+<meta property="og:image" content="images/810.gif">
+<meta property="og:site_name" content="Transum">
+<meta property="og:description" content="Learn more about probability so that you are better able to make informed choices.">
+<meta property="og:type" content="website">
+<meta property="fb:admins" content="1306410124">
+
+<title>Gambling</title>
+
+<link rel="stylesheet" type="text/css" href="css/Quiz_June2014.css">
+
+<style type="text/css">
+body {
+	background-color:#990000;
+	color:#FFFFFF;
+}
+
+div#TopBlackBar {
+	background-color:black;
+	padding:3px;
+	margin-bottom:5px;
+}
+#MainContainer {
+	box-shadow:none;
+	margin-top:10px;
+	background-image:none;
+	background-color:silver;
+	height:470px;
+}
+.LevelTabsBig {margin-top:-43px;margin-bottom:15px;}
+.LevelTabsBig a{font-size:18px;}
+.LevelTabsBig a.ThisOne {background-color:silver;font-size:18px;background-image:none;border-bottom:4px silver solid;}
+
+div.Panel {
+	position:absolute;
+	background-color:white;
+	border:2px black solid;
+	border-radius:10px;
+	width:400px;
+	height:270px;
+	padding:10px;
+	box-sizing:border-box;
+}
+div.Panel p{
+	margin:2px;
+}
+div#CoinPanel {
+	top:10px;
+	right:10px;
+}
+div#CashPanel {
+	top:10px;
+	left:10px;
+}
+div#Coin {
+	position:absolute;
+	top:10px;
+	left:100px;
+	width:200px;
+	height:200px;
+	background-image:url('images/CoinSprite400tall.png');
+	background-repeat:no-repeat;
+	background-position:0px 0px;
+}
+#TossButton, #StartAgain {
+	position:absolute;
+	display:block;
+	width:150px;
+	left:100px;
+	top:200px;
+	text-align:center;
+}
+#Cash {
+	text-align:center;
+	font-size:64px;
+	margin:20px auto;
+}
+div#BetPanel {
+	bottom:10px;
+	left:10px;
+	height:200px;
+}
+
+div#FeedbackPanel {
+	bottom:10px;
+	right:10px;
+	height:200px;
+}
+#Bet {
+	width:80px;
+	font-size:26px;
+	text-align:center;
+}
+#Bet p{
+	margin:10px;
+}
+
+</style>
+
+
+	<script src="js/jquery-1.11.0.min.js" type="text/javascript"></script>
+	<script src="js/jquery-ui-1.10.4.custom.js" type="text/javascript"></script>
+
+	<!-- src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript">< -->
+	<!-- src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js" type="text/javascript">< -->
+
+<script type="text/javascript">
+
+var Cash = 0;
+var Choice = '';
+var Outcome = '';
+$(document).ready(function(){
+	Initialise();
+	WriteInstructions();
+	WriteAnswers();
+	$('#Trophybutton').click(function() {
+		ClaimTrophy(this.form);
+	});
+});
+function Initialise(){
+	$('#TossButton').show();
+	$('#StartAgain').hide();
+	Feedback1();
+	Cash = 25;
+	$('#Cash').html('�' + Cash);
+	$('#Bet').focus().select();
+}
+function Feedback1(){
+	var HTML = '<p>Decide how much you would like to bet.</p>';
+	HTML+= '<p style=\"text-align:center;\">';
+	for (var i=1; i<=2; i++ ){
+		HTML+= '<img src=\"/Software/SW/Starter_of_the_day/Images/Arrows/Arrow_Left.png\" alt=\"Arrow\">';
+	}
+	HTML+= '</p>';
+	$('#FeedbackPanel').html(HTML);
+}
+function Feedback2(){
+	var HTML = '<p style=\"color:red;\">The amount you bet must be between �0 and �' + Cash.toFixed(2) + '. ';
+	HTML+= 'It should be a whole number or a number with two decimal places</p>';
+	HTML+= '<p style=\"color:red; text-align:center; font-size:64px; margin:5px;\">�</p>';
+	$('#FeedbackPanel').html(HTML);
+}
+
+function Feedback3(){
+	var HTML = '<p style=\"color:red;\">As well as entering an amount for your bet you must also choose which side of the coin to bet on: Heads or tails.</p>';
+	HTML+= '<p style=\"color:red; text-align:center; font-size:64px; margin:5px;\">�</p>';
+	$('#FeedbackPanel').html(HTML);
+}
+
+function Toss(){
+	var Bet = $('#Bet').val();
+	if(Bet=='' || Bet<0 || Bet > Cash || FlagWrongCurrencyFormat(Bet)){
+		Feedback2();
+		return;
+	}
+	Choice = $('input[name=Choice]:checked'). val();
+	if(Choice!='H' && Choice!='T'){
+		Feedback3();
+		return;	
+	}
+	var Rnum = rn(1,10);
+	if(Rnum < 7 ) {
+		Outcome = 'H';
+	}else{
+		Outcome = 'T';
+	}
+	for (var i=1; i<=20; i++ ){
+		setTimeout(function(){ TossEffect(); }, i*50);
+	}
+	setTimeout(function(){
+		CheckGamble(Bet);
+	}, 1100);
+}
+function TossEffect(){
+	var c = $('#Coin');
+	setTimeout(function(){ c.css({'background-position':'-200px 0px'}); }, 10);
+	setTimeout(function(){ c.css({'background-position':'-400px 0px'}); }, 20);
+	setTimeout(function(){ c.css({'background-position':'-600px 0px'}); }, 30);
+	setTimeout(function(){ c.css({'background-position':'-800px 0px'}); }, 40);
+	setTimeout(function(){ c.css({'background-position':'-800px -192px'}); }, 50);
+	setTimeout(function(){ c.css({'background-position':'-600px -192px'}); }, 60);
+	setTimeout(function(){ c.css({'background-position':'-400px -192px'}); }, 70);
+	setTimeout(function(){ c.css({'background-position':'-200px -192px'}); }, 80);
+	if(Outcome == 'H'){
+		setTimeout(function(){ c.css({'background-position':'0px 0px'}); }, 100);
+	}else{
+		setTimeout(function(){ c.css({'background-position':'0px -192px'}); }, 100);
+	}
+}
+
+function CheckGamble(Bet){
+	var HTML;
+	if(Choice == Outcome){
+		//WIN
+		HTML = '<p style=\"color:green;\">You won your bet. Your wager has been added to your cash</p>';
+		HTML+= '<p style=\"color:green; text-align:center; font-size:64px; margin:5px;\">;</p>';
+		$('#FeedbackPanel').html(HTML);
+		Cash = parseFloat(Cash) + parseFloat(Bet);
+		if(parseFloat(Cash) > 1000){
+			$('#Trophybutton').show();
+			$('#Trophybutton').val('Claim Your Trophy for accumulating over £1000');
+		}
+	}else{
+		//LOSE
+		HTML = '<p style=\"color:red;\">You lost your bet. Your wager has been taken from your cash</p>';
+		HTML+= '<p style=\"color:red; text-align:center; font-size:64px; margin:5px;\">9</p>';
+		Cash = parseFloat(Cash) - parseFloat(Bet);
+		if(parseFloat(Cash)<0.01){
+			HTML = '<p style=\"color:red;\">You have lost all of your money. Your gambling is over!</p>';
+			HTML+= '<p style=\"color:red; text-align:center; font-size:64px; margin:5px;\">GAME OVER</p>';
+			$('#TossButton').hide();
+			$('#StartAgain').show();
+		}
+		if(parseFloat(Cash) <= 1000){
+			$('#Trophybutton').hide();
+		}
+		
+		$('#FeedbackPanel').html(HTML);	
+	}
+	//console.log('Choice ', Choice, ' :: Outcome ', Outcome, ' :: Bet ',Bet);
+	$('#Cash').html('�' + Cash.toFixed(2));
+}
+
+function rn(Lowest,Highest) {
+	return(Math.floor(Math.random()* (Highest-Lowest+1))+Lowest);
+}
+function ClaimTrophy(form) {
+	form.Other_Text.value = '�' + Cash.toFixed(2);
+	form.submit();
+}
+function ShowDescription() {
+	$('#GreyOut').show();
+	$('#DescriptionBox').show();
+}
+function HideDescription() {
+	$('#GreyOut').hide();
+	$('#DescriptionBox').hide();
+}
+function ShowHelp() {
+	$('#GreyOut').show();
+	$('#HelpBox').show();
+}
+function HideHelp() {
+	$('#GreyOut').hide();
+	$('#HelpBox').hide();
+}
+
+function WriteAnswers() {
+	var HTML = '<h2 style=\"color:red;\">Solution (best strategy)</h2>';
+	
+	HTML+= '<p style=\"color:red;\">The solutions to this and other Transum puzzles, exercises and activities are available in this space when you are signed in to your Transum subscription account. If you do not yet have an account and you are a teacher or parent you can apply for one <a href=/Software/FormativeFeedback/ApplicationForm.asp>here</a>.</p>'; 
+	HTML+= '<p style=\"color:red;\">A Transum subscription also gives you access to the \"Class Admin\" student management system and opens up ad-free access to the Transum website for you and your pupils.</p>';
+	HTML+= '<table style=\"width:450px;margin:auto;border:0px;\"><tr>';
+	HTML+= '<td style=\"background-color:#F00;color:white;\">Teachers<br><input type=\"button\"  style=\"color:black;\" onclick=\"window.location.href = \'https://www.transum.org/Software/FormativeFeedback/ApplicationForm.asp\';\" value=\"Subscribe\" ></td>';
+	HTML+= '<td style=\"background-color:#F00;color:white;\">Parents<br><input type=\"button\" style=\"color:black;\" onclick=\"window.location.href = \'https://www.transum.org/Software/FormativeFeedback/ApplicationFormParent.asp\';\" value=\"Subscribe\" ></td>';
+	HTML+= '<td style=\"background-color:#F00;color:white;\">Tutors<br><input type=\"button\" style=\"color:black;\" onclick=\"window.location.href = \'https://www.transum.org/Software/FormativeFeedback/ApplicationFormParent.asp\';\" value=\"Subscribe\" ></td>';
+	HTML+= '</tr></table>';
+	HTML+= '<p style=\"color:red;\">If you are already a Transum subscriber you can <a href=\"https://www.transum.org/Software/FormativeFeedback/LoginOnly.asp\">sign in here</a>.</p>';
+	
+	$('#Numeracy').html(HTML);
+
+}
+
+function WriteInstructions(){
+	var HTML = '<p>The objective of this simulation is to challenge your intuition about probability and to allow you, in a safe environment, to find the optimal strategy for accumulating money. [Clue: think percentages]</p>';
+	HTML+= '<p>You will find that even those who have a very good strategy still risk losing all of their money, even using this friendly simulation where the odds are in your favour. Click on the \'Description\' tab above for more information about this activity.</p>';
+	$('#PrependHere').prepend(HTML);
+}
+
+function FlagWrongCurrencyFormat(B){
+	var ItisWrong = true;
+	var BetNumber = parseFloat(B);
+	var BetString = B.toString();
+	if(BetNumber === parseInt(BetNumber, 10)){
+		ItisWrong = false;
+	}else{
+		if(BetString.indexOf('.') == (BetString.length-3)){
+			ItisWrong = false;
+		}
+	}
+	return ItisWrong;
+}
+</script>
+
+
+</head>
+<body>
+
+<div id="TopBlackBar">
+
+<div class="Dontshowforprinting">
+<div style="width:728px !important; max-height:50px !important; height:50px !important; text-align:center; overflow:hidden !important; margin:auto;">
+<script async="" src="js/adsbygoogle.js" crossorigin="anonymous"></script>
+<!-- June 2022 new 728x50 -->
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:50px;" data-ad-client="ca-pub-3448116359683998" data-ad-slot="7380049927"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</div>
+
+</div>
+
+<table id="H1Table">
+<tbody><tr><td>
+	<img alt="Transum Software" src="images/AppleVectorRing110.png" style="width: 110px; height: 116px"></td>
+<td>
+	<h1>The Mathematics of Gambling</h1>
+	<h2>Learn more about probability so that you are better able to make informed choices.</h2>
+</td>
+</tr>
+</tbody></table>
+
+
+<div class="Container" id="MainContainer">
+<h5 class="LevelTabs LevelTabsBig Dontshowforprinting">
+<a href="Gambling.asp" class="ThisOne" title="Gambling Simulation">Simulation</a>
+<a href="javascript:void(0);" onclick="javascript:ShowDescription();" title="A brief description of the levels">Description</a>
+<a href="javascript:void(0);" onclick="javascript:window.location.href='/Maths/Exam/Exam.asp?Title=Gambling+Exam+Questions&Instructions=Questions+from+past+exam+papers+involving+the+mathematics+of+gambling.&QuestionOrder=42%2C268%2C317%2C365'" id="ExamStyle" title="GCSE and IB exam-style questions">Exam-Style</a>
+<a href="javascript:void(0);" onclick="javascript:window.location.href='/Software/SW/Starter_of_the_day/Similar.asp?ID_Topic=30'" id="MoreTopic" title="The main topic page with links to many more activities">More Probability</a>
+</h5>
+
+
+<div class="Panel" id="CoinPanel">
+	<div id="Coin"></div>
+	<a href="javascript:void(0);" onclick="Toss();" class="ButNew" id="TossButton">Toss Coin</a>
+	<a href="javascript:void(0);" onclick="Initialise();" class="ButNew" id="StartAgain">Start Again</a>
+</div>
+
+<div class="Panel" id="CashPanel">
+	<p>The coin is biased. It has a 60% chance of landing heads up and a 40% chance of landing tails up. You have the following amount of money to play with:</p>
+	<h3 id="Cash">###</h3>
+	<p>Place your bet using the panel below.</p>
+</div>
+
+<div class="Panel" id="BetPanel">
+	<p>Type the amount of your wager below.</p>
+	<p style="text-align:center; margin-top:20px;">�<input name="Bet" type="number" id="Bet" value="0"></p>
+	<br>
+	<p>Which side of the coin will you bet on?</p>
+	<p style="text-align:center">
+		<label><input name="Choice" type="radio" value="H"> Heads </label>
+		<label><input name="Choice" type="radio" value="T"> Tails </label>
+	</p>
+</div>
+
+<div class="Panel" id="FeedbackPanel">
+</div>
+
+
+</div>
+
+<div class="Dontshowforprinting">
+<form method="post" id="TrophyForm" name="TrophyForm" action="/Trophies/Apply_Trophy.asp">
+
+  	<input type="hidden" value="810" name="id_item">
+  	<input type="hidden" value="0" name="Level">
+  	<input type="hidden" value="" name="Other_Text">
+	<p style="text-align:center"><input type="button" id="Trophybutton" value="Claim Your Trophy" name="Trophy"></p>
+	
+</form>
+<style type="text/css">
+div.inc_Student_index ul, div.inc_Subscriber_index ul{
+	text-align:left;
+	padding-left:10px;
+	font-size: 12pt;
+}
+.inc_Student_index h2, .inc_Subscriber_index h2 {
+	margin:7px;
+	font-size:16px;
+	font-family:"Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+}
+.inc_Student_index ul, .inc_Subscriber_index ul{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+ 	width: 70%;
+}
+.inc_Student_index li, .inc_Subscriber_index li{
+	display: block;
+ 	margin: 0;
+ 	padding: 0;
+ 	line-height:10px;
+}
+.inc_Student_index li a, .inc_Subscriber_index li a{
+	display: block;
+	width: 100%;
+	padding: 0.5em 0 0.5em 2em;
+	border-width: 1px;
+	border-color: #ffe #aaab9c #ccc #fff;
+	border-style: solid;
+	color: #777;
+	text-decoration: none;
+	background: #f7f2ea;
+}
+.inc_Student_index li a:hover, .inc_Subscriber_index li a:hover{
+	color: #800000;
+ 	background: transparent;
+ 	border-color: #aaab9c #fff #fff #ccc;
+}
+
+#QuizFooterTable {
+	box-sizing:border-box;
+	background-color:white;
+	border:3px black solid;
+	width:800px;
+	margin:auto;
+}
+#QuizFooterTable td{
+	padding:13px;
+	margin:0px;
+	border:2px silver solid;
+	text-align:center;
+	vertical-align:top;
+}
+#QuizFooterTable p{
+	font-size:14px;
+	line-height:auto;
+	font-weight:normal;
+	text-align:left;
+	color:black;
+	font-family:Arial, Helvetica, sans-serif;
+}
+#QuizFooterTable h2{
+	font-size:18px;
+	font-weight:bold;
+	text-align:left;
+	color:black;
+}
+</style>
+		
+
+	
+	<table id="QuizFooterTable">
+		<tbody><tr>
+			<td colspan="3" style="text-align:center;" id="PrependHere">
+
+
+
+<div class="Dontshowforprinting">
+<!--IMPORTANT This assumes adsbygoogle.js has already been loaded in the footer.asp file -->
+<!-- Starter 728x90, updated 28 March 2010 -->
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3448116359683998" data-ad-slot="6570002497"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div style="text-align:center; margin-top:15px;">
+
+	<script src="js/sharethis.js#property=5b0b70b6461c9500119099eb&product=inline-share-buttons"></script>
+	<div class="sharethis-inline-share-buttons"></div>
+
+</div>	
+
+
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td><div style="width:100%;">
+			<h2>Transum.org</h2>
+			<p>This web site 
+			contains over a thousand free mathematical activities for teachers and 
+			pupils. <a href="/Software/">Click here</a> to go to the 
+			main page which links to all of the resources available.</p>
+			<p>Please contact me if you have any suggestions or questions.</p>
+			<p><img src="images/email.gif" style="width:150px;height:20px;" alt="Email address"></p>
+			</div>
+			</td>
+			<td><div style="width:340px;padding:20px 0px 0px;">
+
+
+<div class="Dontshowforprinting">
+<!-- Quiz Footer Square 336x280 -->
+<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-3448116359683998" data-ad-slot="9386812249"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</div>
+
+
+</td>
+			<td><div style="width:240px;">
+			<h2>More Activities:</h2>
+						<div class="inc_Student_index">
+							<ul>
+	<li><a title="Find an activity for the Maths topic you are studying" href="/Software/Maths_Map/">Maths Map</a></li>
+	<li><a title="Activitied to engage your mathematical skills" href="/go/">Go Maths</a></li>
+	<li><a title="Mathematical games" href="/Software/Game/">Games</a></li>
+	<li><a title="Mathematical puzzles and challenges" href="/Software/Puzzles/">Puzzles</a></li>
+	<li><a title="Learn a Times Table in only 5 days!" href="/Tables/Times_Tables.asp">Times Tables</a></li>
+	<li><a title="An online multiplication table speed test" href="/Software/Tablesmaster/">TablesMaster</a></li>
+	<li><a title="Activities designed to work well on a touch sensitive screen" href="/iPad/Maths.asp">iPad Maths</a></li>
+	<li><a title="Your chance to be a Mathematics detective" href="/Software/Investigations/">Investigations</a></li>
+	<li><a title="Examination type questions similar to those appearing on GCSE and IB Maths exams." href="/Maths/Exam/">Exam Questions</a></li>
+</ul>
+
+
+						</div>
+			</div>
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td colspan="2" id="GoodCommentsTD">
+			<p>Mathematicians are not the people who find Maths easy; they are the people who enjoy how mystifying, puzzling and hard it is. Are you a mathematician?</p>
+			
+	<p style="text-align:left;">Comment recorded on the <a href="/Software/SW/Starter_of_the_day/starter_June19.asp">19 June</a> 'Starter of the Day' page by Nikki Jordan, Braunton School, Devon:</p>
+	<p style="text-align:left; margin-left:10px;  font-weight:bold;">"Excellent.  Thank you very much for a fabulous set of starters.  I use the 'weekenders' if the daily ones are not quite what I want.  Brilliant and much appreciated."</p>
+
+	<p style="text-align:left;">Comment recorded on the <a href="/Software/SW/Starter_of_the_day/starter_May8.asp">8 May</a> 'Starter of the Day' page by Mr Smith, West Sussex, UK:</p>
+	<p style="text-align:left; margin-left:10px;  font-weight:bold;">"I am an NQT and have only just discovered this website. I nearly wet my pants with joy.<br>To the creator of this website and all of those teachers who have contributed to it, I would like to say a big THANK YOU!!! :)."</p>
+
+			</td>
+			<td>		
+			<p>Each month a <a href="/Newsletter/">newsletter</a> is published containing details of the new additions to the Transum website and a new puzzle of the month.</p>
+			<p>The newsletter is then duplicated as a <a href="/Podcast/">podcast</a> which is available on the major delivery networks. You can listen to the podcast while you are commuting, exercising or relaxing.</p>
+			<p>Transum breaking news is available on Twitter <a href="https://twitter.com/Transum">@Transum</a> and if that's not enough there is also a <a href="https://www.facebook.com/TransumOrg/">Transum Facebook</a> page.</p>
+		</td>
+		</tr>
+		<tr>
+			<td>
+
+<!--googleoff: all-->
+
+<style type="text/css">
+.SomeSpaceAround {
+	text-align:center;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+.FeaturedActivity {
+	background-color:white;
+	border:thin black solid;
+	width:200px;
+	height:280px;
+	padding:4px;
+	margin:auto;
+	text-align: center;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0px 0px 8px rgba(0,0,0,0.5);
+	box-shadow: 0px 0px 8px #000;
+	-moz-box-shadow: 0px 0px 8px rgba(0,0,0,0.5);
+
+}
+.FeaturedActivity h5{
+	font-family:"Times New Roman", Times, serif;
+	font-size:13px;
+	margin: 0px;
+	letter-spacing: 2px;
+	color:gray;
+}
+.FeaturedActivity hr{
+	width:80%;
+	color:red;
+	height:2px;
+}
+.FeaturedActivity img {
+	margin-top:5px;
+	margin-bottom:4px;
+	width:162px;
+	height:100px;
+	border:thin gray solid;
+	-webkit-box-shadow: 0px 0px 4px rgba(200,0,0,0.5);
+	-moz-box-shadow: 0px 0px 4px rgba(200,0,0,0.5);
+	box-shadow: 0px 0px 4px #000;
+}
+.FeaturedActivity a {
+	border:0px;
+}
+</style>
+<div class="SomeSpaceAround">
+<div class="FeaturedActivity">
+<h5>Featured Activity</h5>
+<hr style="margin-bottom:3px;">
+<h4 style="font-family:Arial, Helvetica, sans-serif; font-weight:bold; font-size:14px; margin: 0px; color:black;text-align:center; ">Newsletter</h4><a href="https://www.transum.org/Newsletter"><img src="images/Newsletter.png" alt="Newsletter"></a><p style="color:gray; font-size:11px; margin:0px; font-family:Arial, Helvetica, sans-serif; text-align:center; ">The Transum Newsletter for May 2025 has just been published. Click on the image above to read about the latest developments on this site and try to solve the puzzle of the month. You can read the newsletter online or listen to it by downloading the podcast.</p>
+</div>
+</div>
+<!--googleon: all-->
+
+			</td>
+			<td colspan="2" id="Numeracy">
+		
+			<h2>Numeracy</h2>
+			<p>"Numeracy is a 
+			proficiency which is developed mainly in Mathematics but also in 
+			other subjects. It is more than an ability to do basic arithmetic. 
+			It involves developing confidence and competence with numbers and 
+			measures. It requires understanding of the number system, a 
+			repertoire of mathematical techniques, and an inclination and 
+			ability to solve quantitative or spatial problems in a range of 
+			contexts. Numeracy also demands understanding of the ways in which 
+			data are gathered by counting and measuring, and presented in 
+			graphs, diagrams, charts and tables."</p>
+			<p style="text-align:right:">Secondary National Strategy, Mathematics at key stage 3</p>
+		
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" id="GoMaths">
+			<h2>Go Maths</h2>
+			<p>Learning and 
+			understanding Mathematics, at every level, requires learner 
+			engagement. Mathematics is not a spectator sport. Sometimes 
+			traditional teaching fails to actively involve students. One way to 
+			address the problem is through the use of interactive activities and 
+			this web site provides many of those.
+			The <a href="/go/default.asp">Go Maths</a> main page links to 
+			more activities designed for students in upper Secondary/High school.</p>
+			
+			
+			</td></tr><tr style="background-color:#FFEEEE; padding:3px;"><td colspan="3" style="border-top:4px black solid;border-left:4px black solid;border-right:4px black solid;">
+			<h2 style="margin:3px;">Teachers</h2>
+			</td></tr>
+			<tr style="background-color:#FFEEEE;">
+			<td style="border-left:4px black solid; border-bottom:4px black solid;">
+			
+			<p>If you found this activity useful don't forget to record it in your scheme of work or learning management system. The short URL, ready to be copied and pasted, is as follows:</p>
+			<p style="text-align:center;"><input type="text" style="width:210px; font-size:12px;  direction:rtl; text-align:right; overflow:hidden; padding:0px;" value="https://www.transum.org/go/?Num=810"></p>
+			
+			</td>
+			<td style="border-bottom:4px black solid;">
+			<p>Alternatively, if you use Google Classroom, all you have to do is click on the green icon below in order to add this activity to one of your classes.</p>
+			<script src="js/platform.js" async="" defer=""></script>
+			<g:sharetoclassroom url="https://www.Transum.org/go/?Num=810" size="64"></g:sharetoclassroom>
+			</td>
+			<td style="border-right:4px black solid; border-bottom:4px black solid;">
+			<p>It may be worth remembering that if Transum.org should go offline for whatever reason, there are mirror site at Transum.info that contains most of the resources that are available here on Transum.org.</p>
+			<p>When planning to use technology in your lesson always have a plan B!</p>
+			</td>
+			
+			</tr>
+			
+
+			
+		
+		<tr>
+			<td colspan="3">
+			
+
+<div class="Dontshowforprinting">
+<!-- Quiz Footer Leaderboard -->
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3448116359683998" data-ad-slot="4313429446"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="comment_div">
+				
+		<p class="comment_title">Transum, </p>
+		<p class="comment_date">Wednesday, August 14, 2019</p>
+		<p class="comment_body"><span class="QuotationMarks">"</span>The International Baccalaureate syllabus document suggests topics for discussion such as 'can calculation of gambling probabilities be considered an ethical application of mathematics?' and 'should mathematicians be held responsible for unethical applications of their work?'.<span class="QuotationMarks">"</span></p>				
+		<p class="comment_title">Sheila Camp, </p>
+		<p class="comment_date">Saturday, July 17, 2021</p>
+		<p class="comment_body"><span class="QuotationMarks">"</span><a rel="nofollow" href="https://www.addictionresource.net/">AddictionResouce.net</a> is a company dedicated to helping those who struggle with addiction and co-occurring mental health conditions. They provide resources for those in need as well as information on how to help loved ones struggling with these issues. Their goal is to make the world a better place by making it easier for everyone to talk about their struggles without fear of judgment or stigma on addiction.
+<br><br>
+There is an informational guide at <a rel="nofollow" href="https://www.addictionresource.net/behavioral-addictions/gambling/">https://www.addictionresource.net/behavioral-addictions/gambling/</a>
+<span class="QuotationMarks">"</span></p>				
+		<p class="comment_title">Helen, Sydney</p>
+		<p class="comment_date">Friday, September 16, 2022</p>
+		<p class="comment_body"><span class="QuotationMarks">"</span>This was good until my students discovered "spamming the button" like crazy caused them win thousands of pounds.<br><br>
+[Transum: Thanks for the feedback Helen. By "spamming the button" do you mean clicking the button repeatedly very quickly? I have tried that and the only affect it has is to speed up the process. It doesn't change the probabilities at all]<span class="QuotationMarks">"</span></p>
+</div>
+
+
+
+<p class="comment_invitation">Do you have any comments? It is always useful to receive feedback and helps make this free resource even more useful for those learning Mathematics anywhere in the world.
+<a href="/Include/Comments/Form.asp?pagepath=/Maths/Activity/Probability/Gambling.asp">Click here</a> to enter your comments.</p>
+
+
+
+</td>
+		</tr>
+</tbody></table>
+
+
+
+
+	
+	<script async="" src="js/adsbygoogle.js" crossorigin="anonymous"></script>
+
+	
+
+<style type="text/css">
+div#FooterNew2024 {
+    width: 100%;
+    border-top: 1px black solid;
+    border-bottom: 1px black solid;
+    margin-top: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    background-color: #333333;
+        background-image: linear-gradient(
+        to bottom,
+        #111111 0%,
+        #999999 5%,
+        #777777 30%,
+        #444444 70%,
+        #111111 98%,
+        #000000 100%
+    );
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+div#FooterNew2024 > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+}
+div.FooterNew2024_inc_UL {
+    padding: 0px;
+    text-align: left;
+    flex: 1 1 200px;
+    margin: 10px 1px;
+}
+div.FooterNew2024_inc_UL p {
+    font-family: Arial, Helvetica, sans-serif;
+    color: aliceblue;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 2px;
+}
+div.FooterNew2024_inc_UL a {
+    color: lightgrey;
+    font-size: 12px;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    text-decoration: none;
+}
+div.FooterNew2024_inc_UL a:visited, div.FooterNew2024_inc_UL a:active {
+    color: lightgrey;
+}
+div.FooterNew2024_inc_UL ul {
+    margin: 2px;
+    padding-left: 0;
+}
+div.FooterNew2024_inc_UL li {
+    list-style: none;
+    line-height: 16px;
+}
+div.FooterNew2024_inc_UL input[type=text], div.FooterNew2024_inc_UL input[type=submit] {
+    font-size: 12px;
+}
+div#FooterSearch {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+#FooterSearch input {
+    font-size: 10px;
+    color: black;
+}
+.copyright {
+    text-align: center;
+    margin-top: 20px;
+}
+.copyright a {
+    font-family: 'Courier New', Courier, monospace;
+    color: silver;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apple-logo {
+	width: 142px;
+	height: 195px;
+	position: absolute;
+	top: -30px;
+	right: 0px;
+}
+.KidSafe {
+	height:59px;
+	width:125px;
+	border:0px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+}
+@media (max-width: 768px) {
+	div#FooterNew2024 {
+		margin:20px auto 0px !important;
+		width: 100% !important;
+	}
+    div#FooterNew2024 > div {
+        flex-direction: column;
+        align-items: center;
+    }
+    div.FooterNew2024_inc_UL {
+        text-align: center;
+    }
+    .apple-logo {
+        position: static !important;
+        display: block;
+        margin: 0 auto 20px;
+    }
+    .KidSafe {
+        position: static !important;
+        display: block;
+        margin: 20px auto 20px;
+    }
+}
+</style>
+
+<div id="FooterNew2024" class="Dontshowforprinting">
+    <div>
+        <img alt="Apple" src="images/Apple2.png" class="apple-logo">
+
+        <div class="FooterNew2024_inc_UL">
+            <p>For Students:</p>
+            <ul>
+	<li><a title="Find an activity for the Maths topic you are studying" href="/Software/Maths_Map/">Maths Map</a></li>
+	<li><a title="Activitied to engage your mathematical skills" href="/go/">Go Maths</a></li>
+	<li><a title="Mathematical games" href="/Software/Game/">Games</a></li>
+	<li><a title="Mathematical puzzles and challenges" href="/Software/Puzzles/">Puzzles</a></li>
+	<li><a title="Learn a Times Table in only 5 days!" href="/Tables/Times_Tables.asp">Times Tables</a></li>
+	<li><a title="An online multiplication table speed test" href="/Software/Tablesmaster/">TablesMaster</a></li>
+	<li><a title="Activities designed to work well on a touch sensitive screen" href="/iPad/Maths.asp">iPad Maths</a></li>
+	<li><a title="Your chance to be a Mathematics detective" href="/Software/Investigations/">Investigations</a></li>
+	<li><a title="Examination type questions similar to those appearing on GCSE and IB Maths exams." href="/Maths/Exam/">Exam Questions</a></li>
+</ul>
+
+
+            <p>�</p>
+
+        </div>
+        <div class="FooterNew2024_inc_UL">
+            <p>For Teachers:</p>
+            <ul>
+	<li><a title="A Maths Lesson thinking skills starter for each day of the year" href="/Software/SW/Starter_of_the_day/">Starter of the Day</a></li>
+	<li><a title="Visual Aids to project on to a whiteboard and write on" href="/Software/SW/index.asp">Shine+Write</a></li>
+	<li><a title="Fun mathematical activities for the end of term" href="/Software/Fun_Maths/">Fun Maths</a></li>
+	
+	<li><a title="Read the latest edition of the Transum Newsletter" href="/Newsletter/">Newsletter</a></li>
+	
+	<li><a title="Let the Random Student Generator pick a name at random from your class list" href="/Software/RandomStudents/">Random Names</a></li>
+	
+	
+	<li><a title="Some of the videos available on YouTube that may be of use in Mathematics lessons" href="/Software/SW/YouTube/">Maths Videos</a></li>
+	
+	<!--
+	<li><a title="Getting the best out of portable technology for pupils in Mathematics lessons" href="/Software/OnetoOne/">Laptops in Lessons</a></li>	
+	-->
+	
+	<li><a title="Some great ideas for displaying Mathematics in your classroom" href="/Maths/Display/">Maths On Display</a></li>
+	
+	<li><a title="Our online student information management system and lesson planner" href="/Software/FormativeFeedback/">Class Admin</a></li>
+	<li><a id="NC" title="The English National Curriculum for Mathematics with suggested activities" href="/Maths/National_Curriculum/">Curriculum</a></li>
+</ul>
+        </div>
+        <div class="FooterNew2024_inc_UL">
+            <p>For All:</p>
+            <ul>
+
+	<li><a title="Sign in or subscribe to Transum" href="/Software/FormativeFeedback/LoginOnly.asp">Sign In</a></li>
+
+	<li><a title="Buy a licence to use Transum at your school" href="/Software/Transum_Buy.asp">Create An Account</a></li>
+	<li><a title="Our front door" href="/">Home</a></li>
+	<li><a title="What is Transum?" href="/Software/Transum_About.asp">About Transum</a></li>
+	<li><a title="Find activities to go with the topic you are studying" href="/Software/Transum_Topics.asp">Topics</a></li>
+	<li><a title="Supporting parents supporting their children in Mathematics" href="/Parents/">Parents</a></li>
+	<li><a title="Find out about privacy on the Transum website" href="/Privacy.asp">Privacy Policy</a></li>
+	<li><a title="Contact us by email" href="/Software/Transum_About.asp">Contact Me</a></li>
+	<li><a title="Buy mathematical resources" href="/Software/Transum_Products.asp">Shop</a></li>
+</ul>
+
+
+        </div>
+        <div id="FooterSearch">
+            <form method="get" action="/Search.asp">
+                <input type="text" name="q" placeholder="Search Transum" style="width:120px;">
+                <input type="submit" value="Search">
+            </form>
+        </div>
+        
+        <a href="https://www.kidsafeseal.com/" target="_blank"><img alt="Transum.org is a proud supporter of the kidSAFE Seal Program" src="images/transum_supporter.jpg" class="KidSafe"></a> 
+        
+        
+        
+        <div class="copyright">
+            <a title="Transum" href="https://www.transum.org/Software">�1997-2025 WWW.TRANSUM.ORG</a>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+<!-- GOOGLE ANALYTICS START -->
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-YNQM7Z2FK9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YNQM7Z2FK9');
+</script>
+<!-- GOOGLE ANALYTICS END -->
+
+</div>	
+<div class="Showforprinting">
+	<p style="color:black;text-align:center;font-size:12px;">� Transum Mathematics :: This activity can be found online at:<br>www.Transum.org/go/?Num=810</p>
+</div>
+
+<div id="GreyOut">
+</div>
+
+<div id="DescriptionBox">
+	<h2>Description of Activity</h2>
+	<p>This activity represents an experiment conducted to test people's understanding of probability by two investment fund managers.</p>
+	<p>The Economist reported that Victor Haghani and Rich Dewey invited 61 people, a combination of college-age students in finance and economics and some young professionals at finance firms (including 14 who worked for fund managers), to take a test. They were each given a stake of $25 and then asked to bet on a coin that would land heads 60% of the time. The prizes were real, although capped at $250.</p>
+	<p>Remarkably, 28% of the participants went bust, and the average payout was just $91. Only 21% of the participants reached the maximum. 18 of the 61 participants bet everything on one toss, while two-thirds gambled on tails at some stage in the experiment. Neither approach is in the least bit optimal.</p>
+	<p>The best strategy was devised by J. L. Kelly, Jr, a researcher at Bell Labs, in 1956. The idea of this simulation is for players to work towards finding what this best strategy might be. Good luck.</p>
+	<p>Just for fun, if you accumulate over �1000 you will be awarded with a trophy for being skillful and lucky.</p>
+	<p class="CloseP">Close</p><a onclick="javascript:HideDescription();">
+	<img alt="Close" id="CloseImg" src="images/CloseWindow.png"></a>
+	<div style="border:1px red solid;padding:5px 10px;border-radius:5px" class="DivSignUpButtons">
+
+	<p style="color:red;">Answers to this exercise are available lower down this page when you are logged in to your Transum account. If you don’t yet have a Transum subscription one can be very quickly set up if you are a teacher, tutor or parent.</p>
+	<p style="text-align:center;"><a class="ButNew" href="/Software/FormativeFeedback/LoginOnly.asp">Log in</a> <a class="ButNew" href="/Software/Transum_Buy.asp">Sign up</a></p> 
+
+</div>	
+	<p><a href="javascript:void(0);" onclick="javascript:$('#ExamStyle').click();">Exam Style Questions</a> - A collection of problems in the style of GCSE or IB/A-level exam paper questions (worked solutions are available for Transum subscribers).</p>
+	<p><a href="javascript:void(0);" onclick="javascript:$('#MoreTopic').click();">More on probability</a> including lesson Starters, visual aids, investigations and self-marking exercises.</p>
+	<p>Did you know that Blaise Pascal and Pierre de Fermat invented probability theory in 1654 to solve a gambling problem?</p>
+	<p style="color:red;">WARNING: In the real world commercial gambling operations have a much smaller change of you winning money than this simulation. For more information about the dangers of gambling see <a href="https://raisingchildren.net.au/pre-teens/behaviour/behaviour-questions-issues/gambling">RaisingChildren.net</a>.</p>
+</div>
+
+<div id="HelpBox">
+	<h2>Example</h2>
+
+	<div style="border:1px red solid;padding:5px 10px;border-radius:5px" class="DivSignUpButtons">
+
+	<p style="color:red;">Answers to this exercise are available lower down this page when you are logged in to your Transum account. If you don’t yet have a Transum subscription one can be very quickly set up if you are a teacher, tutor or parent.</p>
+	<p style="text-align:center;"><a class="ButNew" href="/Software/FormativeFeedback/LoginOnly.asp">Log in</a> <a class="ButNew" href="/Software/Transum_Buy.asp">Sign up</a></p> 
+
+</div>
+	<p class="CloseP">Close</p><a onclick="javascript:$('#playerid').attr('src',''); HideHelp();">
+	<img alt="Close" id="CloseImg" src="images/CloseWindow.png"></a>
+</div>
+
+
+</body></html>

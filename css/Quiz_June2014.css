@@ -1,0 +1,508 @@
+﻿/*! normalize.css v3.0.0 | MIT License | git.io/normalize */
+
+/**
+ * Comments removed to minimize size - See original for comments
+ */
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {margin: 0;}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; 
+  vertical-align: baseline; 
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
+a {
+  background: transparent;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+pre {
+  overflow: auto;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+button {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button, html input[type=button], input[type=reset], input[type=submit] {
+  -webkit-appearance: button; 
+  cursor: pointer;
+}
+button[disabled], html input[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input {
+  line-height: normal;
+}
+input[type=checkbox], input[type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type=search] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+}
+optgroup {
+  font-weight: bold;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,th {
+  padding: 0;
+}
+/*! END OF normalize.css v3.0.0 | MIT License | git.io/normalize */
+
+
+body    {
+	text-align: center;
+	}
+h1 	{
+	text-shadow: 4px 4px 4px #1c041c;
+	filter: dropshadow(color=#1c041c, offx=4, offy=4);
+	}
+ul      {
+	text-align: left;
+	}
+td      { 
+	vertical-align:top;
+	text-align:left;
+	}
+div.Container   {
+	position: relative;
+	width: 800px;
+	background-color: #FFFFFF;
+	padding: 20px;
+	text-align:left;
+	color: #000000;
+	border: medium dashed #000000; 
+	margin: 0 auto; font-family:Tahoma; font-size:14pt;
+	}
+#MainContainer {
+	border-radius:10px;
+	border:2px black solid;
+	box-shadow: inset 0 0 20px #000000;
+	margin-bottom:20px;
+	background: #fff url("../images/circles.png") repeat right top;
+	}
+#QuizTable {
+	border:0px;
+	width:100%;
+	margin:auto;
+}
+#MainTable {
+	width:100%;
+	border-collapse:separate;
+ 	border-spacing:10px 10px;
+}
+#MainQuizTable tr, #MainTable tr {
+	page-break-inside: avoid;
+}
+#MainTable td{
+	width:33%;
+	border:2px #000181 solid;
+	border-radius:10px;
+	box-shadow: inset 0 0 10px #000000;	
+}
+#MainTable p{
+	margin:8px;
+}
+#MainTable input {
+	margin:14px 0px 0px 67px;
+}
+input.Answer_box {
+	background-color: PaleTurquoise;
+	color: black;
+	font-family: arial, verdana, ms sans serif;
+	font-weight: bold;
+	font-size: 18px;
+	text-align:center;
+	}
+input.Answer_box::-ms-clear {
+    /*This clears the cross that appears in the input field in IE */
+    display: none;
+}
+textarea.Working {
+	background-color:white;
+	}
+p.Working {
+	color:silver;
+	font-size:small;
+	}
+#Trophybutton {
+	display:none;
+	background-color:red;
+	color:white;
+	font-weight:bold;
+	font-size:18px;
+	font-family:Arial, Helvetica, sans-serif;
+	}
+div#GreyOut {
+	position:absolute;
+	top:30px;
+	left:0px;
+	width:100%;
+	height:1000px;
+	background-color:silver;
+   	/* for IE */
+   filter:alpha(opacity=80);
+   /* CSS3 standard */
+   opacity:0.6;
+   display:none;
+}
+div#DescriptionBox, div#HelpBox {
+	position:absolute;
+	top:150px;
+	width:600px;
+	height:auto;
+	left: 50%;
+	margin-left: -320px;
+	border:6px maroon solid;
+	background-color:white;
+	padding:20px;
+	color:black;
+	display:none;
+	border-radius: 17px;
+	-moz-border-radius: 17px;
+	-webkit-border-radius: 17px;
+	z-index:1000;
+}
+div#DescriptionBox p, div#HelpBox p{
+	text-align:left;
+	font-family:Tahoma;
+	font-size:14px;
+}
+img#CloseImg {
+	position:absolute;
+	width:30px;
+	height:30px;
+	right:5px;
+	top:5px;
+}
+img.CloseImg {
+	position:absolute;
+	width:30px;
+	height:30px;
+	right:5px;
+	top:5px;
+}
+p.CloseP {
+	position:absolute;
+	right:39px;
+	top:-1px;
+	border:0px;
+	padding:0px;
+}
+img.tick {
+	border:0px;
+	width:34px;
+	height:31px;
+	display:none;
+	margin-right: -35px;
+}
+img.cross {
+	border:0px;
+	width:26px;
+	height:32px;
+	display:none;
+}
+ul.Choices   {
+	list-style: none;
+}
+.ChoiceTable {
+	border:0px aqua solid;
+	padding:0px;
+	width:100%;
+}
+.ChoiceTable td{
+	vertical-align:middle;
+}
+.ChoiceTable ul{
+	margin:0px;
+}
+.LevelTabs {
+	margin-top:-35px;
+	margin-bottom:1px;
+	text-align:center;
+	width:800px;
+}
+.LevelTabs a{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#444;
+	background-color:silver;
+	background: repeating-linear-gradient(0deg, silver 30px, white 60px);
+	border:2px black solid;
+	padding:2px 5px 0px 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	text-decoration:none;
+	cursor:pointer;
+}
+.LevelTabs a.ThisOne {
+	color:red;
+	background-color:#CCCCCC;
+	background-image:url('../images/circles_1.png');
+	margin-top:10px;
+	font-size:16px;
+	border-bottom:0px #FFF solid;
+	font-weight:bold;
+	/*box-shadow: inset 0 0 10px #000000;*/
+}
+
+#H1Table {
+	display:table;
+	width:800px;
+	margin:auto;
+	margin-bottom:0px;
+	border:0px aqua solid;
+}
+#H1Table h1, #H1Table h2{
+	margin:1px;
+	font-family:"Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+#H1Table td:first-child {
+	padding-right:10px;
+}
+.Times {
+	font-family:Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+	font-style:italic;
+	font-weight:bold;
+}
+
+.ButNew {
+	display: inline-block;
+    white-space: nowrap;
+    background-color: #ccc;
+    border: 1px solid #777;
+	padding: 3px 20px;
+	margin: 8px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size:20px;
+	text-decoration: none;
+	color: black;
+	border-radius: 3px;
+	/*background: repeating-linear-gradient(0deg, red 33px, yellow  100px);*/
+	background: repeating-linear-gradient(0deg, orange 0px, orange 5px, yellow);
+	cursor:pointer;
+}   
+.ButNew:hover {
+	background-color: #eee;        
+	background: repeating-linear-gradient(0deg, orange 0px, yellow 10px, yellow);
+}
+.ButNew:active {
+	box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+	/*top: 1px;*/
+} 
+.ButNew:focus {
+    outline: 0;
+    background: repeating-linear-gradient(0deg, orange 0px, yellow 20px, yellow);
+
+}     
+.ButNew:before {
+	background: #ccc;
+    background: rgba(0,0,0,.1);
+    float: left;        
+    width: 25px;
+    text-align: center;
+    font-size:26px;
+    margin: -3px 20px 0 -20px;
+    padding: 0 4px;
+    box-shadow: 1px 0 0 rgba(0,0,0,.5), 2px 0 0 rgba(255,255,255,.5);
+    border-radius: 2px 0 0 2px;       
+}
+.ButCheck {
+	display:block;
+	margin:auto;
+	width:100px;
+	padding-bottom:7px;
+}
+.ButCheck:before{content: "\2713";}
+.ButLevel {
+	font-weight:normal;
+	font-size:16px;
+	margin:6px 1px 6px 1px;;
+}
+.ButGame:before{content: "\2650";}
+.ButMore:before{content: "\271A";}
+.ButVid:before{content: "\1F4BB";}
+.ButOptions:before{content: "\263C";}
+.ButNext:before{content: "\2192";}
+.ButInstruct:before{content: "\270D";}
+.ButConfirm:before{content: "\1F44D";}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+.Showforprinting { display:none;}
+#PrintableAnswers {
+	width:700px;
+	margin:20px auto;
+	padding:20px;
+	border:2px red solid;
+	text-align:left;
+}
+@media print {
+	body {
+		background-color:#FFFFFF !important;
+		/*background-image:url('/Software/SW/Starter_of_the_day/Images/Backgrounds/white.png');*/
+		background-image:none !important;
+	}
+	#MainContainer {
+		background:none;
+		background-color:white;
+	}
+	div#TopBlackBar {
+		display:none;
+	}
+	h3 {display: none; }
+	div#Dontshowforprinting { display: none;}
+	span.Dontshowforprinting { display: none;}
+	.Dontshowforprinting { display: none;}
+	h1, #H1Table h2 { color: #000000; text-shadow:none;}
+	.Showforprinting { display:inline-block;}
+	.NotVisibleforprinting {visibility:hidden;}
+	#MainTable input, #MainQuizTable input {
+		display:inline-block;
+		border:0px;
+		border-bottom:2px black dotted;
+		margin:0px auto 20px;
+		width:90px;
+		height:70px;
+		font-size:26px;
+		background-color:white !important;
+	}
+	#MainQuizTable textarea {
+		border:0px;
+	}
+	input.Answer_box {
+		background-color:white;
+	}
+	#Checkbutton {
+		display:none;
+	}
+}
